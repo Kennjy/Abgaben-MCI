@@ -1,0 +1,180 @@
+
+  <html>
+   <head>
+      <title>Human Capabilities - Reaction test</title>
+   </head>
+   <body>
+	
+      <script type="text/javascript">
+         var experimentActive = false; var testActive = false;
+         var times = new Array();
+         var lastTimeColorChanged;
+		 var counter;
+		 
+		// Circle
+		var canvas = document.getElementById('myCanvas');
+		var context = canvas.getContext('2d');
+		//Position of Circle
+		var centerX = 250;
+		var centerY = 100;
+		var radius = Math.random()*100;
+
+		context.beginPath();
+		context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+		context.fillStyle = 'red';
+		context.fill();
+		context.lineWidth = 1;
+		context.strokeStyle = '#003300';
+		context.stroke();
+	  
+		// Triangle
+		var canvasElement = document.querySelector("#myCanvas");
+		var context = canvasElement.getContext("2d");
+ 
+		
+		context.beginPath();
+		//Top
+		context.moveTo(100, 100);
+		//Left
+		context.lineTo(100, 300);
+		//Right
+		context.lineTo(300, 300);
+		context.closePath();
+ 
+		// the outline
+		context.lineWidth = 1;
+		
+		context.stroke();
+ 
+		// the fill color
+		context.fillStyle = "FFCC00";
+		context.fill();
+		
+        
+		 
+         function startExperiment() {
+		    //unVisible();
+		    counter = 0;
+         	experimentActive = true; 
+         	document.getElementById("time").innerHTML = "";
+          	document.getElementById("count").innerHTML = ""; 
+          	document.getElementById("mean").innerHTML = ""; 
+          	document.getElementById("sd").innerHTML = ""; 
+          	document.getElementById("instruction").innerHTML = "Press SPACE when color changes! Press 'a' for results!";
+         	startTest();
+         }
+         
+         function startTest() {	
+         	changeTextColor("black");
+         	timeInSeconds = Math.random() * 4 + 2; // 2 - 6s 
+         	window.setTimeout("showStimulus()", timeInSeconds * 1000);
+         }
+         
+		 // + start visuell und start audio impl.
+         function showStimulus() { 
+		 //stops if counter is on 31 so it will end within 30 experiments
+		    counter ++;
+		    if (counter == 31)
+			   {stopExperiment();};
+			   
+			   testActive = true;
+			   var random = Math.random()*2;
+			   if (random < 1){
+			      startCircle();  
+			   }else{
+			      startTriangle();
+			   }
+         }
+         
+         function stopTest() {
+         	var currTime = new Date().getTime();
+         	var deltaTime = currTime - lastTimeColorChanged; 
+         	times.push(deltaTime); 
+         	document.getElementById("time").innerHTML = deltaTime + "ms"; 
+         	testActive = false;
+			unVisible();
+         	startTest();
+         }
+         
+         function stopExperiment() { 
+         	window.setTimeout("showStimulus()", 0); 
+         	testActive = false;
+         	var meanDeltaTime = 0.0;
+         	for (var i = 0; i < times.length; ++i) {
+         		meanDeltaTime += times[i]; }
+         	meanDeltaTime = Math.round(meanDeltaTime / times.length);
+         	var standardDerivation = 0.0;
+         	for (var i = 0; i < times.length; ++i) {
+         		var diff = (times[i] - meanDeltaTime);
+         		standardDerivation += diff * diff; }
+         	standardDerivation =  Math.round(Math.sqrt(standardDerivation / times.length)); 
+         	document.getElementById("count").innerHTML = "Count: " + times.length; 
+         	document.getElementById("mean").innerHTML = "Mean: " + meanDeltaTime + "ms"; 
+         	document.getElementById("sd").innerHTML = "SD: " + standardDerivation + "ms"; 
+         	document.getElementById("instruction").innerHTML = "Press SPACE to start!"; 
+         	times = [];
+         	experimentActive = false; 
+         }
+         function changeTextColor(newColor) { 
+         	document.getElementById("colorBar").style.color = newColor; 
+         	document.getElementById("colorBar").style.backgroundColor = newColor; 
+         	lastTimeColorChanged = new Date().getTime();
+         }
+         
+		 makes Circle visible
+		 function startCircle(){
+		 document.getElementById('myCanvas').style.visibility="visible"; 
+		 }
+		 
+		 makes Circle unvisible
+		 function unVisible(){
+		 document.getElementById('myCanvas').style.visibility="hidden"; 
+		 }
+		 
+		 function startTriangle(){
+		 document.getElementById('#myCanvas').style.visibility='visible';
+		 }
+		 
+		 function unVisible(){
+		 document.getElementById('#myCanvas').style.visibility="hidden";
+		 }
+		 
+		 		 
+         document.onkeydown = onKey;
+         function onKey(e) { if (e == null) {
+                 e = window.event;
+             }
+         	switch (e.which || e.charCode || e.keyCode) { 
+         		case 32:
+         		// space
+         		if (!experimentActive) {
+         			startExperiment(); } 
+         			else {
+         				if (testActive) {
+         					stopTest();
+         				} 
+         			}
+         		break;
+         		case 65: // a
+         		if (experimentActive) {
+         			stopExperiment(); 
+         		}
+         		break;
+         		case 66:
+         		// b
+         		// here you can extend... alert("pressed the b key"); break;
+         	} 
+         }
+      </script>
+      <h1>
+         <p id="UserStudy">User Study</p>
+      </h1>
+      <h1 id="instruction">Press SPACE to start!</h1>
+      <p>
+      <p id="time"></p>
+      <p id="count"></p>
+      <p id="mean"></p>
+      <p id="sd"></p>
+	  <canvas id="myCanvas" width="500" height="500"></canvas>
+   </body>
+</html>
