@@ -1,0 +1,148 @@
+<html>
++   <head>
++      <title>Human Capabilities - Reaction test</title>
++   </head>
++   <body>
++      <script type="text/javascript">
++         var experimentActive = false; var testActive = false;
++         var times = new Array();
+          var animals = new Array();
+		  animals[0]= "Elefant",true;
+		  animals[1]= "Löwe",true;
+		  animals[2]= "Hund",true;
+	      animals[3]= "Katze",true;
+		  animals[4]= "Schimpanse",true;
+		  animals[5]= "Maus",true;
+		  animals[6]= "Känguru",true;
+		  animals[7]= "Eidechse",false;
+		  animals[8]= "Hase",true;
+		  animals[9]= "Spinne",false;
+		  
+		  
++        var lastTimeStimulusChanged;
++		 var counter ;
++		 
++         function startExperiment() {
++		    unVisible();
++		    counter = 0;
++         	experimentActive = true; 
++         	document.getElementById("time").innerHTML = "";
++          	document.getElementById("count").innerHTML = ""; 
++          	document.getElementById("Decision").innerHTML = ""; 
++          	document.getElementById("sd").innerHTML = ""; 
++          	document.getElementById("instruction").innerHTML = "Press t when the aninmal is a mammalian, press f if not";
++         	startTest();
++         }
++         
++         function startTest() {	
++         	//changeTextColor("black");
++         	timeInSeconds = Math.random() * 4 + 2; // 2 - 6s 
++         	window.setTimeout("showStimulus()", timeInSeconds * 1000);
++         }
++         
++		 // + start visuell und start audio impl.
++         function showStimulus() { 
+               startText();
++         }
++         
++         function stopTest() {
++         	var currTime = new Date().getTime();
++         	var deltaTime = currTime - lastTimeStimulusChanged; 
++         	times.push(deltaTime); 
++         	document.getElementById("time").innerHTML = deltaTime + "ms"; 
++         	testActive = false;
++			unVisible();
++         	startTest();
++         }
++         
++         function stopExperiment() { 
++         	window.setTimeout("showStimulus()", 0); 
++         	testActive = false;
++         	var DecisionDeltaTime = 0.0;
++         	for (var i = 0; i < times.length; ++i) {
++         		DecisionDeltaTime += times[i]; }
++         	DecisionDeltaTime = Math.round(DecisionDeltaTime / times.length);
++         	var standardDerivation = 0.0;
++         	for (var i = 0; i < times.length; ++i) {
++         		var diff = (times[i] - DecisionDeltaTime);
++         		standardDerivation += diff * diff; }
++         	standardDerivation =  Math.round(Math.sqrt(standardDerivation / times.length)); 
++         	document.getElementById("count").innerHTML = "Count: " + times.length; 
++         	document.getElementById("Decision").innerHTML = "Decision time: " + DecisionDeltaTime + "ms"; 
++         	document.getElementById("sd").innerHTML = "Standart derivation: " + standardDerivation + "ms";
++         	document.getElementById("instruction").innerHTML = "Press SPACE to start!"; 
++         	times = [];
++         	experimentActive = false; 
++         }
++		 
++		 //makes texts visible
++		 function startText(){
+         
+         for(index=0;index<animals.length;++index){
++		 document.getElementById("demo").innerHTML = animals[index]; 
+         }
+		 stopExperiment();
++		 }
++		 
++		 //standardDerivation
++		 function standardDerivationFct(){
++		    var standardDerivation = 0.0;
++			for (var i = 0; i < times.length; ++i) {
++         		var diff = (times[i] - DecisionDeltaTime);
++         		standardDerivation += diff * diff; }
++         	standardDerivation =  Math.round(Math.sqrt(standardDerivation / times.length)); 
++			//print results
++			document.getElementById("Decision").innerHTML = "Decision time: " + DecisionDeltaTime + "ms"; 
++		 }
++		 //DecisionTime
++		 function DecisionTimeFct(){
++		 var DecisionTime = 0.0;
++         	for (var i = 0; i < times.length; ++i) {
++         		DecisionTime += times[i]; }
++         	DecisionTime = Math.round(DecisionTime / times.length);
++			//print
++			document.getElementById("sd").innerHTML = "Standart derivation: " + standardDerivation + "ms"; 
++		 }
++		 //failure
++		 
++         //Keyboardactions		 
++         document.onkeydown = onKey;
++         function onKey(e) { if (e == null) {
++                 e = window.event;
++             }
++         	switch (e.which || e.charCode || e.keyCode) { 
++         		case 32:
++         		// space
++         		if (!experimentActive) {
++         			startExperiment(); } 
++         			else {
++         				if (testActive) {
++         					stopTest();
++         				} 
++         			}
++         	/**	break;
++         		case 65: // a
++         		if (experimentActive) {
++         			stopExperiment(); 
++         		}
++         		break;
++         		case 66: **/
++         		// b
++         		// here you can extend... alert("pressed the b key"); break;
++         	} 
++         }
++      </script>
++      <h1>
++         <p id="UserStudy">User Study B3</p>
++      </h1>
++      <h1 id="instruction">Press SPACE to start!</h1>
++	 
++	  
++      <p id="time"></p>
++      <p id="count"></p>
++      <p id="Decision"></p>
++      <p id="sd"></p>
++
++
++   </body>
++</html> 
