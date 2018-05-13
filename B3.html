@@ -84,7 +84,7 @@
 			
 			//error rate
 			var errorRate = 0.0;
-			errorRate = (errorCount/counter)*100;
+			errorRate = (errorCount/(counter-1))*100;
 			document.getElementById("failure").innerHTML = "Your failures:"; 	
 			document.getElementById("errorCount").innerHTML = "Count:" + errorCount; 	
 			document.getElementById("error").innerHTML = "Error-rate:" + errorRate + "%"; 		
@@ -134,8 +134,7 @@
 				if (testActive) {
 			        if (randomArray[0] > 6){
 					errorCount++;
-					document.getElementById("animal").innerHTML = "";
-					document.getElementById("error").innerHTML= "Wrong answer";
+					document.getElementById("animal").innerHTML = "Wrong answer";
 					stopTest();
 					}else {
 					document.getElementById("animal").innerHTML = "Right answer";
@@ -149,8 +148,7 @@
 				//if false and <7 false , no mammalian
 				if (randomArray[0] < 7){
 					errorCount++;
-					document.getElementById("animal").innerHTML = "";
-					document.getElementById("error").innerHTML= "Wrong answer";
+					document.getElementById("animal").innerHTML = "Wrong answer";
 					stopTest();
 					}else {
 					document.getElementById("animal").innerHTML = "Right answer";
