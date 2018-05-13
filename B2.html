@@ -1,0 +1,201 @@
+
+<html><head>
+      <title>Human Capabilities - Reaction test</title>
+   </head>
+   <body>
+      <script type="text/javascript">
+         var experimentActive = false; var testActive = false;
+         var times = new Array();
+         var lastTimeStimulusChanged;
+		 var counter ;
+		 var error = new Boolean (true);
+		 var errorCount = 0.0;
+		 var visuell = new Boolean;
+		 
+		 
+         function startExperiment() {
+		    counter = 0;
+         	experimentActive = true; 
+			unVisible();
+			document.getElementById("name").innerHTML = ""; 	
+         	document.getElementById("time").innerHTML = "";
+          	document.getElementById("count").innerHTML = ""; 
+          	document.getElementById("mean").innerHTML = ""; 
+          	document.getElementById("sd").innerHTML = ""; 
+			document.getElementById("failure").innerHTML = ""; 	
+			document.getElementById("errorCount").innerHTML = ""; 	
+			document.getElementById("error").innerHTML = ""; 		
+          	document.getElementById("instruction").innerHTML = "Press SPACE when you see a Triangle! Don't do it when you see a circle! After 30 times you will get your results. If you want to get your results earlier press 'A' ";
+         	startTest();
+         }
+         
+         function startTest() {	
+		    unVisible();
+         	timeInSeconds = Math.random() * 4 + 2; // 2 - 6s 
+         	window.setTimeout("showStimulus()", timeInSeconds * 1000);
+         }
+         
+		 //shows random stimulus
+         function showStimulus() { 
+			   testActive = true;
+			   error = false;
+			   var random = Math.random()*2;
+			   if (random < 1){
+			      visuell = true;
+			      startTriangle();
+				  //sets visuell true for decision in "space" - event
+				  
+			   }else{
+			      visuell = false;
+			      startCircle();
+				  
+			   }
+         }
+			
+		//pushes the time of Visuell in Visuell Array
+         function stopTestVisuell() {
+         	var currTime = new Date().getTime();
+         	var deltaTime = currTime - lastTimeStimulusChanged; 
+         	times.push(deltaTime); 
+         	document.getElementById("time").innerHTML = deltaTime + "ms"; 
+         	testActive = false;
+			//unVisible();
+			error = true;
+         	countToStop();
+         }
+		 
+		 //if counter is on 30, Experminet stops
+		 function countToStop(){
+		 counter++;
+		 document.getElementById("error").innerHTML = "";
+		  if (counter >= 30 && experimentActive){
+			   stopExperiment();
+		  }else{
+		       document.getElementById("count").innerHTML = "Count: " + counter;
+		       startTest();
+		  }
+		 }
+		 
+         function stopExperiment() { 
+         	testActive = false;
+			unVisible();
+			//Visuell reactions
+         	var meanDeltaTime = 0.0;
+         	for (var i = 0; i < times.length; ++i) {
+         		meanDeltaTime += times[i]; }
+         	meanDeltaTime = Math.round(meanDeltaTime / times.length);
+         	var standardDerivation= 0.0;
+         	for (var i = 0; i < times.length; ++i) {
+         		var diff = (times[i] - meanDeltaTime);
+         		standardDerivation += diff * diff; }
+         	standardDerivation =  Math.round(Math.sqrt(standardDerivation/ times.length));
+			document.getElementById("name").innerHTML = "Results :"; 
+			document.getElementById("count").innerHTML = ""; 
+         	document.getElementById("count").innerHTML = "Count: " + times.length; 
+         	document.getElementById("mean").innerHTML = "Mean: " + meanDeltaTime+ "ms"; 
+         	document.getElementById("sd").innerHTML = "SD: " + standardDerivation + "ms"; 
+         	document.getElementById("instruction").innerHTML = "Press SPACE to start!"; 
+			
+			//error rate
+			var errorRate = 0.0;
+			errorRate = (errorCount/(times.length + times.length))*100;
+			document.getElementById("failure").innerHTML = "Your failures:"; 	
+			document.getElementById("errorCount").innerHTML = "Count:" + errorCount; 	
+			document.getElementById("error").innerHTML = "Error-rate:" + errorRate + "%"; 		
+			
+			times = [];
+         	experimentActive = false; 
+         }
+		 
+		 //makes picture visible
+		 function startCircle(){
+		 var scale = parseInt(150 + Math.floor(Math.random() * 201)) + "px";
+		 document.getElementById("circle").style.width = scale;
+		 document.getElementById("circle").style.height = scale;
+		 document.getElementById('circle').style.visibility="visible"; 
+		 window.setTimeout("countToStop()", 5 * 1000);
+		 }
+		 
+		 //makes picture unvisible
+		 function unVisible(){
+		  document.getElementById('circle').style.visibility="hidden"; 
+		  document.getElementById('triangle').style.visibility="hidden"; 
+		 }
+		 
+		 function startTriangle(){
+		 var scale = parseInt(150 + Math.floor(Math.random() * 201)) + "px";
+		 document.getElementById("triangle").style.width = scale;
+		 document.getElementById("triangle").style.height = scale;
+		 document.getElementById('triangle').style.visibility="visible"; 
+		 lastTimeStimulusChanged = new Date().getTime();
+		 }
+	
+		 
+         //Keyboardactions		 
+         document.onkeydown = onKey;
+         function onKey(e) { if (e == null) {
+                 e = window.event;
+             }
+         	switch (e.which || e.charCode || e.keyCode) { 
+         		case 32:
+         		// space
+         		if (!experimentActive) {
+         			startExperiment(); } 
+         			else if (experimentActive) {
+					    if (testActive && error == false){
+					       // if visuell is shown, go to function
+         				   if (testActive && visuell == true) {
+         					   stopTestVisuell();
+						   }else if (testActive && visuell == false){
+						       errorCount++;
+							   document.getElementById("error").innerHTML= "You pressed 'SPACE' while circle is shown, maybe next time";
+							   countToStop();
+						   }
+						}else{
+						   errorCount++;
+						   document.getElementById("error").innerHTML = "Too early, maybe next time" ; 
+						   testActive = false;
+			               //unVisible();
+			               error = true;
+         	               countToStop();
+						}
+         			} 
+         			
+         		break;
+         		case 65: // a
+         		if (experimentActive) {
+         			stopExperiment(); 
+         		}
+         		break;
+         		case 66: 
+         		// b
+         		// here you can extend... alert("pressed the b key"); break;
+         	} 
+         }
+      </script>
+      <h1>
+         <p id="UserStudy">User Study</p>
+      </h1>
+      <h1 id="instruction">Press SPACE when you see a Triangle! Don't do it when you see a circle! After 30 times you will get your results. If you want to get your results earlier press 'A' </h1>
+	  <div style="width:150px; height:150px">
+  <img id="circle" src="circle.jpg" style="width: 150px; height:150px; position: absolute; z-index: 0; visibility: hidden;">
+  <img id="triangle" src="triangle.jpg" style="width: 150px; height: 150px; position: relative; z-index: 1; visibility: visible;">
+  </div>
+	 <!-- <img id="circle" src="circle.jpg" width="150" height="150" alt="" style="z-index:1;" > 
+	  <img id="triangle" src="triangle.jpg" width="150" height="150" alt="" style="z-index:1;"> -->
+	  <p>
+	  </p><p id="failure"></p>
+	  <p id="errorCount"></p>
+	  <p id="error"></p>
+	  <p>
+	  </p><p id="name"></p>
+      <p id="time"></p>
+      <p id="count"></p>
+      <p id="mean"></p>
+      <p id="sd"></p>
+	  <audio id="audiofile" preload="auto">
+      <source src="cow.mp3">
+</audio>
+   
+
+</body></html>
