@@ -7,9 +7,10 @@
          var experimentActive = false; var testActive = false;
          var times = new Array();
          var animals = new Array();
-		 animals = [ "Elefant","Löwe","Hund","Katze","Schimpanse","Maus","Elster","Krokodil","Eidechse","Spinne"];
+		 animals = [ "Elefant","Loewe","Hund","Katze","Schimpanse","Maus","Elster","Krokodil","Eidechse","Spinne"];
          var lastTimeStimulusChanged;
 		 var counter ;
+		 
 		 var errorCount;
 		 var randomArray = new Array();
 		 
@@ -32,6 +33,7 @@
          function startTest() {	
          	timeInSeconds = Math.random() * 4 + 2; // 2 - 6s 
          	window.setTimeout("showStimulus()", timeInSeconds * 1000);
+			counter++;
          }
          
 		 // random beetween 0-9 random animal collection
@@ -44,6 +46,7 @@
 			   //hier ist das problem random frissst er nicht , beim array ausdrucken, wieso auch immer.
 			   document.getElementById("animal").innerHTML = animals[random].toString() ;
 			   lastTimeStimulusChanged = new Date().getTime();
+			   
          }
          
          function stopTest() {
@@ -81,12 +84,12 @@
 			
 			//error rate
 			var errorRate = 0.0;
-			errorRate = (errorCount/(timesAudio.length + timesVisuell.length))*100;
+			errorRate = (errorCount/counter)*100;
 			document.getElementById("failure").innerHTML = "Your failures:"; 	
 			document.getElementById("errorCount").innerHTML = "Count:" + errorCount; 	
 			document.getElementById("error").innerHTML = "Error-rate:" + errorRate + "%"; 		
          	
-			times = [];
+			
          	experimentActive = false; 
          }
 		 /**
@@ -133,9 +136,9 @@
 					errorCount++;
 					document.getElementById("animal").innerHTML = "";
 					document.getElementById("error").innerHTML= "Wrong answer";
-					startTest();
+					stopTest();
 					}else {
-					document.getElementById("animal").innerHTML = "";
+					document.getElementById("animal").innerHTML = "Right answer";
 					stopTest();
 					}
          		}
@@ -148,9 +151,9 @@
 					errorCount++;
 					document.getElementById("animal").innerHTML = "";
 					document.getElementById("error").innerHTML= "Wrong answer";
-					startTest();
+					stopTest();
 					}else {
-					document.getElementById("animal").innerHTML = "";
+					document.getElementById("animal").innerHTML = "Right answer";
 					stopTest();
 					}
          			
@@ -176,6 +179,8 @@
       <p id="mean"></p>
       <p id="sd"></p>
 	  <p id ="median"></p>
+	 
+	  
 	  
 
 
