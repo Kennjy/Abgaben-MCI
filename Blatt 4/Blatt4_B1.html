@@ -1,0 +1,27 @@
+<html>
+   <head>
+      <title>Fitts' Law Reaction Test</title>
+   </head>
+   <body>
+<canvas id="myCanvas">
+Your browser don't support canvas </canvas>
+
+<script type="text/javascript">
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+var height = window.innerHeight;
+var width = window.innerWidth;
+c.width  = width ;
+c.height = height ;
+ctx.beginPath();
+ctx.moveTo(0,height/2);
+ctx.lineTo(width, height/2);
+ctx.stroke();
+</script>
+<style type="text/css">
+body {
+    overflow-y:hidden;
+}
+</style>
+   </body>
+</html>
