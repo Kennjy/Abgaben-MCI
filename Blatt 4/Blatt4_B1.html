@@ -16,9 +16,27 @@ c.height = height ;
 ctx.beginPath();
 ctx.moveTo(0,height/2);
 ctx.lineTo(width, height/2);
+var rectangle = document.getElementById("d");  
+/*
+function drawRectangles(int a){
+a = -300;
+while(a < 1000){
+a + 34; 
 
-var rectangle = ctx.rect( height/2 + 150 , height/2 - 20  , 50 , 40);
-//rectangle.style.color="red";
+rectangle = ctx.rect( height/2 + a , height/2 - 5 , 20 , 10);
+
+}
+a = - 250;
+drawRectangles(a);
+}
+*/
+var formate = [10,20,30,40,50,10,20,30,40,50];
+
+
+var hoehe = formate[Math.floor(Math.random() * 10)];
+
+rectangle = ctx.rect(height/2 - 300 , height/2 - hoehe/2 , 2 * hoehe , hoehe );
+
 ctx.stroke();
 </script>
 <style type="text/css">
@@ -27,5 +45,4 @@ body {
 }
 </style>
    </body>
-</html>
 </html>
