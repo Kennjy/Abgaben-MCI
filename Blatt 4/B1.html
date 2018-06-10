@@ -1,0 +1,78 @@
+<html>
+   <head>
+      <title>Fitts' Law Reaction Test</title>
+   </head>
+   <body>
+<canvas id="myCanvas">Your browser don't support canvas </canvas>
+<script type="text/javascript">
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+var height = window.innerHeight;
+var width = window.innerWidth;
+c.width  = width ;
+c.height = height ;
+ctx.beginPath();
+ctx.moveTo(0,height/2);
+ctx.lineTo(width, height/2);
+var rectangle = document.getElementById("d");  
+
+var counter1 = 1;
+var counter2 = 1;
+var counter3 = 1;
+var counter4 = 1;
+var counter5 = 1;
+
+
+function positioner(){
+
+var formate = [10,20,30,40,50];
+var hoehe = formate[Math.floor(Math.random() * 5)];
+var newPosition = Math.random() * width;
+
+if (newPosition >= (width - hoehe/2) || newPosition <= oldPosition + 30 || counter1 >= 10 ||  counter2 >= 10 ||  counter3 >= 10||  counter4 >= 10||  counter5 >= 10){
+positioner();
+if (counter1 + counter2 + counter3 + counter4 + counter5 == 50){
+//end this};
+}else{
+rectangle = ctx.rect(newPosition, height/2 - hoehe/2, 2 * hoehe , hoehe );
+var oldPosition = newPosition;
+
+/*if (hoehe == 0){
+counter1++;
+}else if (hoehe == 1){
+counter2++;
+}else if (hoehe == 2){
+counter3++;
+}else if (hoehe == 3){
+counter4++;
+}else if (hoehe == 4){
+counter5++;
+}*/
+
+switch (hoehe){
+case 0: counter1++; break;
+case 1: counter2++; break;
+case 2: counter3++; break;
+case 3: counter4++; break;
+case 4: counter5++; break;
+}
+
+}
+}
+positioner();
+
+ctx.fillStyle = "red";
+ctx.fill();
+ctx.stroke();
+
+
+
+
+</script>
+<style type="text/css">
+body {
+    overflow:hidden;
+}
+</style>
+   </body>
+</html>
